@@ -62,7 +62,7 @@ void TitleState::draw()
 		window.draw(text_);
 }
 
-bool TitleState::update(sf::Time dt, CommandQueue& commands)
+bool TitleState::update(sf::Time dt)
 {
 	textEffectTime_ += dt;
 

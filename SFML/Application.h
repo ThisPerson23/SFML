@@ -36,7 +36,6 @@
 #include "PlayerControl.h"
 #include "TextureManager.h"
 #include "StateStack.h"
-#include "CommandQueue.h"
 
 #include <SFML\System\Time.hpp>
 #include <SFML\Graphics\RenderWindow.hpp>
@@ -49,11 +48,11 @@ class Application
 	public:
 									Application();
 
-		void						run(CommandQueue& commands);
+		void						run();
 
 	private:
 		void						processInput();
-		void						update(sf::Time dt, CommandQueue& commands);
+		void						update(sf::Time dt);
 		void						render();
 
 		void						updateStatistics(sf::Time dt);

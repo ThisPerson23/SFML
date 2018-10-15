@@ -55,7 +55,7 @@ namespace GEX
 		int					getHitpoints() const;
 
 	protected:
-		virtual void		updateCurrent(sf::Time dt, CommandQueue& commands);
+		 void				updateCurrent(sf::Time dt, CommandQueue& commands) override;
 
 	private:
 		virtual void		drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;

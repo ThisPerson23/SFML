@@ -60,7 +60,7 @@ namespace GEX
 		int					getDamage() const;
 
 	protected:
-		void				updateCurrent(sf::Time dt, CommandQueue& commands) override;
+		void				updateCurrent(sf::Time dt, GEX::CommandQueue& commands) override;
 
 	private:
 		void				drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;

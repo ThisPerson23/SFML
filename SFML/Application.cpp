@@ -61,14 +61,14 @@ Application::Application()
 
 	statisticsText_.setFont(GEX::FontManager::getInstance().get(GEX::FontID::Main));
 	statisticsText_.setPosition(15.0f, 15.0f);
-	statisticsText_.setCharacterSize(15.0f);
+	statisticsText_.setCharacterSize(15);
 	statisticsText_.setString("Frames Per Second = \nTime / Update = ");
 
 	registerStates();
 	stateStack_.pushState(GEX::StateID::Title);
 
 }
-void Application::run(CommandQueue& commands)
+void Application::run()
 {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
@@ -80,7 +80,7 @@ void Application::run(CommandQueue& commands)
 		while (timeSinceLastUpdate > TimePerFrame)
 		{
 			processInput();
-			update(TimePerFrame, commands);
+			update(TimePerFrame);
 
 			if (stateStack_.isEmpty())
 				window_.close();
@@ -108,9 +108,9 @@ void Application::processInput()
 	}
 }
 
-void Application::update(sf::Time dt, CommandQueue& commands)
+void Application::update(sf::Time dt)
 {
-	stateStack_.update(dt, commands);
+	stateStack_.update(dt);
 }
 
 void Application::render()

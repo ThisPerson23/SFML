@@ -43,7 +43,7 @@ public:
 	MenuState(GEX::StateStack& stateStack, Context context);
 
 	void					draw() override;
-	bool					update(sf::Time dt, CommandQueue& commands) override;
+	bool					update(sf::Time dt) override;
 	bool					handleEvent(const sf::Event& event) override;
 
 	void					updateOptionText();

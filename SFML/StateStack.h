@@ -65,7 +65,7 @@ namespace GEX
 		template <typename T>
 		void						registerState(GEX::StateID stateID);
 
-		void						update(sf::Time dt, CommandQueue& commands);
+		void						update(sf::Time dt);
 		void						draw();
 		void						handleEvent(const sf::Event& event);
 

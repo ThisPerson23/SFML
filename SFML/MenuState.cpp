@@ -79,7 +79,7 @@ void MenuState::draw()
 		window.draw(text);
 }
 
-bool MenuState::update(sf::Time dt, CommandQueue& commands)
+bool MenuState::update(sf::Time dt)
 {
 	return true;
 }

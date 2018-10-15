@@ -107,7 +107,7 @@ void GEXState::draw()
 	window.draw(instructionsTextReturnToMenu_);
 }
 
-bool GEXState::update(sf::Time dt, CommandQueue& commands)
+bool GEXState::update(sf::Time dt)
 {
 	return false;
 }

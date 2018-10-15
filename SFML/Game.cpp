@@ -64,7 +64,7 @@ namespace GEX
 
 		statisticsText_.setFont(font_);
 		statisticsText_.setPosition(15.0f, 15.0f);
-		statisticsText_.setCharacterSize(15.0f);
+		statisticsText_.setCharacterSize(15);
 		statisticsText_.setString("Frames Per Second = \nTime / Update = ");
 	}
 
