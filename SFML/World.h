@@ -106,7 +106,7 @@ namespace GEX
 		SceneNode					sceneGraph_;
 		std::vector<SceneNode*>		sceneLayers_;
 
-		CommandQueue			commandQueue_;
+		CommandQueue				commandQueue_;
 		sf::FloatRect				worldBounds_;
 		sf::Vector2f				spawnPosition_;
 		float						scrollSpeed_;
