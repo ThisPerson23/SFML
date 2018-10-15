@@ -196,6 +196,5 @@ namespace GEX
 
 		// add enemy planes
 		addEnemies();
-
 	}
 }
