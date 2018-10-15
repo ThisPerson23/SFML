@@ -194,17 +194,6 @@ namespace GEX
 		playerAircraft_ = leader.get();
 		sceneLayers_[Air]->attachChild(std::move(leader));
 
-		//add escort planes
-			//left escort
-		std::unique_ptr<Aircraft> leftEscort(new Aircraft(Aircraft::Type::Raptor, textures_));
-		leftEscort->setPosition(-80.f, 50.f);
-		playerAircraft_->attachChild(std::move(leftEscort));
-
-			//right escort
-		std::unique_ptr<Aircraft> rightEscort(new Aircraft(Aircraft::Type::Raptor, textures_));
-		rightEscort->setPosition(80.f, 50.f);
-		playerAircraft_->attachChild(std::move(rightEscort));
-
 		// add enemy planes
 		addEnemies();
 

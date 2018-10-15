@@ -67,6 +67,11 @@ namespace GEX
 		velocity_.y += vy;
 	}
 
+	bool Entity::isDestroyed() const
+	{
+		return false;
+	}
+
 	int Entity::getHitpoints() const
 	{
 		return hitPoints_;

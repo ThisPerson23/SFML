@@ -43,6 +43,7 @@
 
 #include "Command.h"
 #include "Category.h"
+#include "CommandQueue.h"
 
 // forward declarations
 struct Command;

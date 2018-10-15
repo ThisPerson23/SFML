@@ -123,7 +123,7 @@ namespace GEX
 
 	void Aircraft::launchMissile()
 	{
-			isLaunchingMissiles_ = true;
+		isLaunchingMissiles_ = true;
 	}
 
 	bool Aircraft::isAllied() const

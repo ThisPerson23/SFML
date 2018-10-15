@@ -35,6 +35,7 @@
 #pragma once
 
 #include "SceneNode.h"
+#include "CommandQueue.h"
 
 namespace GEX
 { 

@@ -82,5 +82,7 @@ namespace GEX
 		data[Projectile::Type::Missile].damage = 200;
 		data[Projectile::Type::Missile].speed = 200.f;
 		data[Projectile::Type::Missile].texture = TextureID::Missile;
+
+		return data;
 	}
 }
