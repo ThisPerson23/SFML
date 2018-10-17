@@ -62,6 +62,8 @@ namespace GEX
 
 		playerAircraft_->setVelocity(0.f, 0.f);
 
+		guideMissiles();
+
 		// run all the commands in the command queue
 		while (!commandQueue_.isEmpty())
 			sceneGraph_.onCommand(commandQueue_.pop(), dt);
@@ -143,6 +145,47 @@ namespace GEX
 		bounds.top -= 100.f;
 		bounds.height += 100.f;
 		return bounds;
+	}
+
+	void World::guideMissiles()
+	{
+		// build a list of active Enemies
+		Command enemyCollector;
+		enemyCollector.category = Category::EnemyAircraft;
+		enemyCollector.action = derivedAction<Aircraft>([this](Aircraft& enemy, sf::Time dt)
+		{
+			if (!enemy.isDestroyed())
+				activeEnemies_.push_back(&enemy);
+		});
+
+		Command missileGuider;
+		missileGuider.category = Category::Type::AlliedProjectile;
+		missileGuider.action = derivedAction<Projectile>([this](Projectile& missile, sf::Time dt)
+		{
+			//ignore bullets
+			if (!missile.isGuided())
+				return;
+
+			float minDistance = std::numeric_limits<float>::max();
+			Aircraft* closestEnemy = nullptr;
+
+			for (Aircraft* e : activeEnemies_)
+			{
+				auto d = distance(missile, *e);
+				if (d < minDistance)
+				{
+					minDistance = d;
+					closestEnemy = e;
+				}
+			}
+
+			if (closestEnemy)
+				missile.guidedTowards(closestEnemy->getWorldPosition());
+		});
+
+		commandQueue_.push(enemyCollector);
+		commandQueue_.push(missileGuider);
+		activeEnemies_.clear();
 	}
 
 	void World::draw()

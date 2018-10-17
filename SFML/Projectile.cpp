@@ -70,8 +70,32 @@ namespace GEX
 		return TABLE.at(type_).damage;
 	}
 
+	bool Projectile::isGuided() const
+	{
+		return (type_ == Type::Missile);
+	}
+
+	void Projectile::guidedTowards(sf::Vector2f position)
+	{
+		assert(isGuided());
+		targetDirection_ = unitVector(position - getWorldPosition());
+	}
+
 	void GEX::Projectile::updateCurrent(sf::Time dt, CommandQueue& commands)
 	{
+		if (isGuided())
+		{
+			const float APPROACH_RATE = 400.f;
+
+			auto newVelocity = unitVector(APPROACH_RATE * dt.asSeconds() * targetDirection_ + getVelocity());
+
+			newVelocity *= getMaxSpeed();
+			setVelocity(newVelocity);
+
+			auto angle = std::atan2(newVelocity.y, newVelocity.x);
+			setRotation(toDegree(angle) + 90.f);
+		}
+
 		Entity::updateCurrent(dt, commands);
 	}
 

@@ -6,7 +6,7 @@
 *
 *
 * @section DESCRIPTION
-* Button Class
+* Pickup Class
 *
 *
 *
@@ -32,60 +32,27 @@
 * NBCC Academic Integrity Policy (policy 1111)
 */
 
-#include "Button.h"
-#include "TextureManager.h"
-#include "ResourceIdentifiers.h"
+#include "Pickup.h"
+#include "DataTables.h"
 
-namespace GUI
-{
-	Button::Button(const sf::Font& font, const GEX::TextureManager& textures)
-		: callback_()
-		, normalTexture_(textures.get(GEX::TextureID::ButtonNormal))
-		, selectedTexture_(textures.get(GEX::TextureID::ButtonSelected))
-		, pressedTexture_(textures.get(GEX::TextureID::ButtonPressed))
-		, sprite_()
-		, text_()
-		, isToggle_(false)
+namespace GEX
+{ 
+	namespace
+	{
+		const std::map<Pickup::Type, PickupData> TABLE = initializePickupData();
+	}
+
+	Pickup::Pickup(Type type, const TextureManager& textures)
+		: Entity(1)
+		, type_(type)
+		, sprite_(textures.get(TABLE.at(type).texture))
 	{}
-
-	void Button::setCallback(Callback callback)
+	unsigned int Pickup::getCategory() const
 	{
+		return 0;
 	}
-
-	void Button::setText(const std::string & text)
+	sf::FloatRect Pickup::getBoundingBox() const
 	{
-	}
-
-	void Button::setToggle(bool flag)
-	{
-	}
-
-	bool Button::isSelectable() const
-	{
-		return false;
-	}
-
-	void Button::select()
-	{
-	}
-
-	void Button::deselect()
-	{
-	}
-
-	void Button::activate()
-	{
-	}
-
-	void Button::deactivate()
-	{
-	}
-
-	void Button::handleEvent(const sf::Event & event)
-	{
-	}
-
-	void Button::draw(sf::RenderTarget & target, sf::RenderStates & states) const
-	{
+		return sf::FloatRect();
 	}
 }

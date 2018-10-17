@@ -69,7 +69,24 @@ namespace GEX
 
 	bool Entity::isDestroyed() const
 	{
-		return false;
+		return hitPoints_ <= 0;
+	}
+
+	void Entity::damage(int points)
+	{
+		assert(points > 0);
+		hitPoints_ -= points;
+	}
+
+	void Entity::repair(int points)
+	{
+		assert(points > 0);
+		hitPoints_ += points;
+	}
+
+	void Entity::destroy()
+	{
+		hitPoints_ = 0;
 	}
 
 	int Entity::getHitpoints() const

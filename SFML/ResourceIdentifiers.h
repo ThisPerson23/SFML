@@ -44,10 +44,11 @@ namespace GEX
 		Avenger,
 		TitleScreen,
 		GEXStateFace,
-		ButtonNormal,
-		ButtonPressed,
-		ButtonSelected,
-		Bullet
+		Bullet,
+		HealthRefill,
+		MissileRefill,
+		FireSpread,
+		FireRate
 	};
 
 	enum class FontID {

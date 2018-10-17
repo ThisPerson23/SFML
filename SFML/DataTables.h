@@ -37,6 +37,7 @@
 #include "ResourceIdentifiers.h"
 #include "Projectile.h"
 #include "Aircraft.h"
+#include "Pickup.h"
 
 #include <SFML\System\Time.hpp>
 #include <SFML\Graphics\Color.hpp>
@@ -75,6 +76,13 @@ namespace GEX
 		TextureID	texture;
 	};
 
+	struct PickupData
+	{
+		std::function<void(Aircraft&)>	action;
+		TextureID						texture;
+	};
+
+	std::map<Pickup::Type, PickupData> initializePickupData();
 	std::map<Projectile::Type, ProjectileData> initializeProjectileData();
 	std::map<Aircraft::Type, AircraftData> initializeAircraftData();
 }

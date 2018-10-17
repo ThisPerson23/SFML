@@ -72,6 +72,9 @@ namespace GEX
 		sf::Vector2f			getWorldPosition() const;
 		sf::Transform			getWorldTransform() const;
 
+		virtual sf::FloatRect	getBoundingBox() const;
+		void					drawBoundingBox(sf::RenderTarget& target, sf::RenderStates states) const;
+
 	protected:
 			//update the tree
 		virtual void			updateCurrent(sf::Time dt, CommandQueue& commands);
@@ -89,4 +92,6 @@ namespace GEX
 
 		Category::Type			category_;
 	};
+
+	float distance(const SceneNode& lhs, const SceneNode& rhs);
 }

@@ -53,6 +53,11 @@ namespace GEX
 		void				accelerate(float vx, float vy);
 
 		virtual bool		isDestroyed() const;
+
+		void				damage(int points);
+		void				repair(int points);
+		void				destroy();
+
 		int					getHitpoints() const;
 
 	protected:

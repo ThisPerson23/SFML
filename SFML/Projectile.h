@@ -59,6 +59,9 @@ namespace GEX
 		float				getMaxSpeed() const;
 		int					getDamage() const;
 
+		bool				isGuided() const;
+		void				guidedTowards(sf::Vector2f position);
+
 	protected:
 		void				updateCurrent(sf::Time dt, GEX::CommandQueue& commands) override;
 

@@ -6,7 +6,7 @@
 *
 *
 * @section DESCRIPTION
-* Button Class
+* Pickup Class
 *
 *
 *
@@ -34,51 +34,31 @@
 
 #pragma once
 
-#include "Component.h"
+#include "Entity.h"
 #include "TextureManager.h"
 
-#include <SFML\Graphics\Sprite.hpp>
-#include <SFML\Graphics\Text.hpp>
-
-#include <vector>
-#include <string>
-#include <memory>
-#include <functional>
-
-namespace GUI
-{
-	class Button : public Component
+namespace GEX
+{ 
+	class Pickup : public Entity
 	{
 	public:
-		typedef std::shared_ptr<Button>		Ptr;
-		typedef	std::function<void()>			Callback;
+		enum class Type
+		{
+			HealthRefill,
+			MissileRefill,
+			FireSpread,
+			FireRate
+		};
 
 	public:
-		Button(const sf::Font& font, const GEX::TextureManager& textures);
+						Pickup(Type type, const TextureManager& textures);
+						~Pickup() = default;
 
-		void				setCallback(Callback callback);
-		void				setText(const std::string& text);
-		void				setToggle(bool flag);
-
-		virtual bool		isSelectable() const;
-		virtual void		select();
-		virtual void		deselect();
-
-		virtual void		activate();
-		virtual void		deactivate();
-
-		virtual void		handleEvent(const sf::Event& event);
+		unsigned int	getCategory() const override;
+		sf::FloatRect	getBoundingBox() const override;
 
 	private:
-		virtual void		draw(sf::RenderTarget& target, sf::RenderStates& states) const;
-
-	private:
-		Callback			callback_;
-		const sf::Texture&	normalTexture_;
-		const sf::Texture&	selectedTexture_;
-		const sf::Texture&	pressedTexture_;
-		sf::Sprite			sprite_;
-		sf::Text			text_;
-		bool				isToggle_;
+		Type			type_;
+		sf::Sprite		sprite_;
 	};
 }

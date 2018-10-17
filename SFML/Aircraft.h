@@ -63,10 +63,15 @@ namespace GEX
 
 		void					updateTexts(); //update mini health and missile display
 
+		bool					isAllied() const;
+
 		void					fire();
 		void					launchMissile();
 
-		bool					isAllied() const;
+		void					increaseFireRate();
+		void					increaseFireSpread();
+		void					collectMissiles(unsigned int count);
+		sf::FloatRect			getBoundingBox() const override;
 
 	protected:
 		void					updateCurrent(sf::Time dt, CommandQueue& commands) override;
