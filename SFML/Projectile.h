@@ -62,6 +62,8 @@ namespace GEX
 		bool				isGuided() const;
 		void				guidedTowards(sf::Vector2f position);
 
+		sf::FloatRect		getBoundingBox() const override;
+
 	protected:
 		void				updateCurrent(sf::Time dt, GEX::CommandQueue& commands) override;
 

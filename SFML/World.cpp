@@ -207,6 +207,10 @@ namespace GEX
 		textures_.load(GEX::TextureID::Avenger, "Media/Textures/Avenger.png");
 		textures_.load(GEX::TextureID::Bullet, "Media/Textures/Bullet.png");
 		textures_.load(GEX::TextureID::Missile, "Media/Textures/Missile.png");
+		textures_.load(GEX::TextureID::FireRate, "Media/Textures/FireRate.png");
+		textures_.load(GEX::TextureID::FireSpread, "Media/Textures/FireSpread.png");
+		textures_.load(GEX::TextureID::MissileRefill, "Media/Textures/MissileRefill.png");
+		textures_.load(GEX::TextureID::HealthRefill, "Media/Textures/HealthRefill.png");
 	}
 
 	void World::buildScene()
