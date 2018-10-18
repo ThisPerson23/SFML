@@ -135,7 +135,7 @@ namespace GEX
 		case Action::MoveRight:
 		case Action::MoveDown:
 		case Action::MoveUp:
-		case Action::Fire:
+		//case Action::Fire:
 		//case Action::LaunchMissile:
 			return true;
 

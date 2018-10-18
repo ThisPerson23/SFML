@@ -44,6 +44,7 @@ namespace Category
 		EnemyAircraft		= 1 << 3,
 		EnemyProjectile		= 1 << 4,
 		AlliedProjectile	= 1 << 5,
-		AirSceneLayer		= 1 << 6
+		AirSceneLayer		= 1 << 6,
+		Pickup
 	};
 }

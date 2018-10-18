@@ -34,6 +34,8 @@
 
 #include "World.h"
 #include "Aircraft.h"
+#include "Pickup.h"
+#include "Projectile.h"
 
 namespace GEX
 { 
@@ -57,22 +59,31 @@ namespace GEX
 
 	void World::update(sf::Time dt, CommandQueue& commands)
 	{
-		// update the world
+		// Scroll screen and reset player velocity
 		worldView_.move(0.f, scrollSpeed_ * dt.asSeconds());
-
 		playerAircraft_->setVelocity(0.f, 0.f);
 
+		// Guide missiles
 		guideMissiles();
 
 		// run all the commands in the command queue
 		while (!commandQueue_.isEmpty())
+		{ 
 			sceneGraph_.onCommand(commandQueue_.pop(), dt);
-
+		}
 		adaptPlayerVelocity();
+
+		//Handle collisions
+		handleCollision();
+
+		//Spawn enemies
+		spawnEnemies();
+
+		//Regular update step, and adapt position of aircraft
 		sceneGraph_.update(dt, getCommandQueue());
 		adaptPlayerPosition();
 
-		spawnEnemies();
+		
 	}
 
 	void World::adaptPlayerVelocity()
@@ -186,6 +197,63 @@ namespace GEX
 		commandQueue_.push(enemyCollector);
 		commandQueue_.push(missileGuider);
 		activeEnemies_.clear();
+	}
+
+	bool matchesCategory(SceneNode::Pair& colliders, Category::Type type1, Category::Type type2)
+	{
+		unsigned int category1 = colliders.first->getCategory();
+		unsigned int category2 = colliders.second->getCategory();
+
+		// Make sure pair entryhas category type1 and second has type2
+		if (type1 & category1 && type2 & category2)
+		{
+			return true;
+		}
+		else if (type1 & category2 && type2 & category1)
+		{
+			std::swap(colliders.first, colliders.second);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	void World::handleCollision()
+	{
+		//build a list of colliding pairs of SceneNodes
+		std::set<SceneNode::Pair> collisionPairs;
+		sceneGraph_.checkSceneCollision(sceneGraph_, collisionPairs);
+
+		for (SceneNode::Pair pair : collisionPairs)
+		{
+			if (matchesCategory(pair, Category::PlayerAircraft, Category::EnemyAircraft))
+			{
+				auto& player = static_cast<Aircraft&>(*pair.first);
+				auto& enemy = static_cast<Aircraft&>(*pair.second);
+
+				player.damage(enemy.getHitpoints());
+				enemy.destroy();
+			}
+			else if (matchesCategory(pair, Category::PlayerAircraft, Category::Pickup))
+			{
+				auto& player = static_cast<Aircraft&>(*pair.first);
+				auto& pickup = static_cast<Pickup&>(*pair.second);
+
+				pickup.apply(player);
+				pickup.destroy();
+			}
+			else if (matchesCategory(pair, Category::PlayerAircraft, Category::EnemyProjectile) ||
+				     matchesCategory(pair, Category::EnemyAircraft, Category::AlliedProjectile))
+			{
+				auto& aircraft = static_cast<Aircraft&>(*pair.first);
+				auto& projectile = static_cast<Projectile&>(*pair.second);
+
+				aircraft.damage(projectile.getDamage());
+				projectile.destroy();
+			}
+		}
 	}
 
 	void World::draw()

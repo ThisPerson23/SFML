@@ -63,7 +63,7 @@ namespace GEX
 	{
 		int								hitpoints;
 		float							speed;
-		GEX::TextureID					texture;
+		TextureID						texture;
 		sf::Time						fireInterval;
 
 		std::vector<Direction>			directions;
@@ -82,7 +82,7 @@ namespace GEX
 		TextureID						texture;
 	};
 
-	std::map<Pickup::Type, PickupData> initializePickupData();
-	std::map<Projectile::Type, ProjectileData> initializeProjectileData();
-	std::map<Aircraft::Type, AircraftData> initializeAircraftData();
+	std::map<Pickup::Type, PickupData>			initializePickupData();
+	std::map<Projectile::Type, ProjectileData>	initializeProjectileData();
+	std::map<Aircraft::Type, AircraftData>		initializeAircraftData();
 }

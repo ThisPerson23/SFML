@@ -52,7 +52,7 @@ namespace GEX
 		void				accelerate(sf::Vector2f velocity);
 		void				accelerate(float vx, float vy);
 
-		virtual bool		isDestroyed() const;
+		bool				isDestroyed() const override;
 
 		void				damage(int points);
 		void				repair(int points);

@@ -110,6 +110,28 @@ namespace GEX
 		target.draw(box);
 	}
 
+	bool SceneNode::isDestroyed() const
+	{
+		return false;
+	}
+
+	void SceneNode::checkSceneCollision(SceneNode & node, std::set<Pair>& collisionPair)
+	{
+		checkNodeCollision(node, collisionPair);
+
+		for (Ptr& c : node.children_)
+			checkSceneCollision(*c, collisionPair);
+	}
+
+	void SceneNode::checkNodeCollision(SceneNode & node, std::set<Pair>& collisionPair)
+	{
+		if (this != &node && collision(*this, node) && !isDestroyed() && !node.isDestroyed())
+			collisionPair.insert(std::minmax(this, &node));
+
+		for (Ptr& c : children_)
+			c->checkNodeCollision(node, collisionPair);
+	}
+
 	void SceneNode::update(sf::Time dt, CommandQueue& commands)
 	{
 		updateCurrent(dt, commands);
@@ -170,6 +192,11 @@ namespace GEX
 	float distance(const SceneNode & lhs, const SceneNode & rhs)
 	{
 		return length(lhs.getWorldPosition() - rhs.getWorldPosition());
+	}
+
+	bool collision(const SceneNode & lhs, const SceneNode & rhs)
+	{
+		return lhs.getBoundingBox().intersects(rhs.getBoundingBox());
 	}
 
 }
