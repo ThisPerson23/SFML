@@ -51,7 +51,7 @@ namespace GEX
 	}
 	
 	Aircraft::Aircraft(Aircraft::Type type, const TextureManager& textures)
-		: Entity(TABLE.at(type_).hitpoints)
+		: Entity(TABLE.at(type).hitpoints)
 		, type_(type)
 		, sprite_(textures.get(TABLE.at(type).texture))
 		, healthDisplay_(nullptr)

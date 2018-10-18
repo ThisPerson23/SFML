@@ -54,10 +54,6 @@ namespace GEX
 		data[Aircraft::Type::Raptor].directions.emplace_back(Direction(-45.f, 160.f));
 		data[Aircraft::Type::Raptor].directions.emplace_back(Direction(45.f, 80.f));
 
-		data[Aircraft::Type::Raptor].directions.emplace_back(Direction(45.f, 80.f));
-		data[Aircraft::Type::Raptor].directions.emplace_back(Direction(-45.f, 160.f));
-		data[Aircraft::Type::Raptor].directions.emplace_back(Direction(45.f, 80.f));
-
 		data[Aircraft::Type::Avenger].hitpoints = 40;
 		data[Aircraft::Type::Avenger].speed = 50.f;
 		data[Aircraft::Type::Avenger].texture = TextureID::Avenger;

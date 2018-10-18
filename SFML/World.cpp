@@ -112,12 +112,31 @@ namespace GEX
 		// Add spawn points for enemies outside the local view
 	void World::addEnemies()
 	{
-		addEnemy(Aircraft::Type::Raptor, -250.f, 200.f);
-		addEnemy(Aircraft::Type::Raptor, 0.f, 200.f);
-		addEnemy(Aircraft::Type::Raptor, 250.f, 200.f);
-
-		addEnemy(Aircraft::Type::Avenger, -70.f, 400.f);
-		addEnemy(Aircraft::Type::Avenger, 70.f, 400.f);
+		addEnemy(Aircraft::Type::Raptor, 0.f, 500.f);
+		addEnemy(Aircraft::Type::Raptor, 0.f, 1000.f);
+		addEnemy(Aircraft::Type::Raptor, +100.f, 1150.f);
+		addEnemy(Aircraft::Type::Raptor, -100.f, 1150.f);
+		addEnemy(Aircraft::Type::Avenger, 70.f, 1500.f);
+		addEnemy(Aircraft::Type::Avenger, -70.f, 1500.f);
+		addEnemy(Aircraft::Type::Avenger, -70.f, 1710.f);
+		addEnemy(Aircraft::Type::Avenger, 70.f, 1700.f);
+		addEnemy(Aircraft::Type::Avenger, 30.f, 1850.f);
+		addEnemy(Aircraft::Type::Raptor, 300.f, 2200.f);
+		addEnemy(Aircraft::Type::Raptor, -300.f, 2200.f);
+		addEnemy(Aircraft::Type::Raptor, 0.f, 2200.f);
+		addEnemy(Aircraft::Type::Raptor, 0.f, 2500.f);
+		addEnemy(Aircraft::Type::Avenger, -300.f, 2700.f);
+		addEnemy(Aircraft::Type::Avenger, -300.f, 2700.f);
+		addEnemy(Aircraft::Type::Raptor, 0.f, 3000.f);
+		addEnemy(Aircraft::Type::Raptor, 250.f, 3250.f);
+		addEnemy(Aircraft::Type::Raptor, -250.f, 3250.f);
+		addEnemy(Aircraft::Type::Avenger, 0.f, 3500.f);
+		addEnemy(Aircraft::Type::Avenger, 0.f, 3700.f);
+		addEnemy(Aircraft::Type::Raptor, 0.f, 3800.f);
+		addEnemy(Aircraft::Type::Avenger, 0.f, 4000.f);
+		addEnemy(Aircraft::Type::Avenger, -200.f, 4200.f);
+		addEnemy(Aircraft::Type::Raptor, 200.f, 4200.f);
+		addEnemy(Aircraft::Type::Raptor, 0.f, 4400.f);
 
 		std::sort(enemySpawnPoints_.begin(), enemySpawnPoints_.end(), 
 			[](Spawnpoint lhs, Spawnpoint rhs)
@@ -228,7 +247,7 @@ namespace GEX
 
 		for (SceneNode::Pair pair : collisionPairs)
 		{
-			if (matchesCategory(pair, Category::PlayerAircraft, Category::EnemyAircraft))
+			if (matchesCategory(pair, Category::Type::PlayerAircraft, Category::Type::EnemyAircraft))
 			{
 				auto& player = static_cast<Aircraft&>(*pair.first);
 				auto& enemy = static_cast<Aircraft&>(*pair.second);
@@ -236,7 +255,7 @@ namespace GEX
 				player.damage(enemy.getHitpoints());
 				enemy.destroy();
 			}
-			else if (matchesCategory(pair, Category::PlayerAircraft, Category::Pickup))
+			else if (matchesCategory(pair, Category::Type::PlayerAircraft, Category::Type::Pickup))
 			{
 				auto& player = static_cast<Aircraft&>(*pair.first);
 				auto& pickup = static_cast<Pickup&>(*pair.second);
@@ -244,8 +263,8 @@ namespace GEX
 				pickup.apply(player);
 				pickup.destroy();
 			}
-			else if (matchesCategory(pair, Category::PlayerAircraft, Category::EnemyProjectile) ||
-				     matchesCategory(pair, Category::EnemyAircraft, Category::AlliedProjectile))
+			else if (matchesCategory(pair, Category::Type::PlayerAircraft, Category::Type::EnemyProjectile) ||
+				     matchesCategory(pair, Category::Type::EnemyAircraft, Category::Type::AlliedProjectile))
 			{
 				auto& aircraft = static_cast<Aircraft&>(*pair.first);
 				auto& projectile = static_cast<Projectile&>(*pair.second);
