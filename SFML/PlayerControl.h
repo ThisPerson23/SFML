@@ -59,6 +59,13 @@ namespace GEX
 		LaunchMissile
 	};
 
+	enum class MissionStatus
+	{
+		MissionRunning,
+		MissionSuccess,
+		MissionFailure
+	};
+
 	class PlayerControl
 	{
 	public:
@@ -66,6 +73,9 @@ namespace GEX
 
 		void			handleEvent(const sf::Event& event, CommandQueue& commands);
 		void			handleRealtimeInput(CommandQueue& commands);
+
+		void			setCurrentMissionStatus(MissionStatus status);
+		MissionStatus	getCurrentMissionStatus() const;
 		
 	private:
 		void			initializeActions();
@@ -74,5 +84,6 @@ namespace GEX
 	private:
 		std::map<sf::Keyboard::Key, Action> keyBindings_;
 		std::map<Action, Command>			actionBindings_;
+		MissionStatus						currentMissionStatus_;
 	};
 }

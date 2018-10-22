@@ -63,23 +63,29 @@ namespace GEX
 		worldView_.move(0.f, scrollSpeed_ * dt.asSeconds());
 		playerAircraft_->setVelocity(0.f, 0.f);
 
+		// Destroy all entities that leave the battlefield
+		destroyEntitiesOutOfView();
+
 		// Guide missiles
 		guideMissiles();
 
-		// run all the commands in the command queue
+		// Run all the commands in the command queue
 		while (!commandQueue_.isEmpty())
 		{ 
 			sceneGraph_.onCommand(commandQueue_.pop(), dt);
 		}
 		adaptPlayerVelocity();
 
-		//Handle collisions
+		// Handle collisions
 		handleCollision();
 
-		//Spawn enemies
+		// Destroy all wrecks on the battlefield
+		sceneGraph_.removeWrecks();
+
+		// Spawn enemies
 		spawnEnemies();
 
-		//Regular update step, and adapt position of aircraft
+		// Regular update step, and adapt position of aircraft
 		sceneGraph_.update(dt, getCommandQueue());
 		adaptPlayerPosition();
 
@@ -275,6 +281,19 @@ namespace GEX
 		}
 	}
 
+	void World::destroyEntitiesOutOfView()
+	{
+		Command command;
+		command.category = Category::Type::Projectile | Category::Type::EnemyAircraft;
+		command.action = derivedAction<Entity>([this](Entity& e, sf::Time dt)
+		{
+			if (!getBattlefieldBounds().intersects(e.getBoundingBox()))
+				e.remove();
+		});
+
+		commandQueue_.push(command);
+	}
+
 	void World::draw()
 	{
 		window_.setView(worldView_);
@@ -284,6 +303,16 @@ namespace GEX
 	CommandQueue& World::getCommandQueue()
 	{
 		return commandQueue_;
+	}
+
+	bool World::hasAlivePlayer() const
+	{
+		return playerAircraft_->isMarkedForRemoval();
+	}
+
+	bool World::hasPlayerReachedEnd() const
+	{
+		return !worldBounds_.contains(playerAircraft_->getPosition());
 	}
 
 	void World::loadTextures()
@@ -305,7 +334,7 @@ namespace GEX
 		// Initialize layers
 		for (int i = 0; i < LayerCount; i++)
 		{
-			auto category = i == Air ? Category::Type::AirSceneLayer : Category::Type::None;
+			auto category = i == Air ? Category::Type::SceneAirLayer : Category::Type::None;
 			SceneNode::Ptr layer(new SceneNode(category));
 			sceneLayers_.push_back(layer.get());
 			sceneGraph_.attachChild(std::move(layer));

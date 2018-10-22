@@ -78,6 +78,9 @@ namespace GEX
 		void					drawBoundingBox(sf::RenderTarget& target, sf::RenderStates states) const;
 
 		virtual bool			isDestroyed() const;
+		virtual bool			isMarkedForRemoval() const;
+
+		void					removeWrecks();
 
 		void					checkSceneCollision(SceneNode& node, std::set<Pair>& collisionPair);
 		void					checkNodeCollision(SceneNode& node, std::set<Pair>& collisionPair);

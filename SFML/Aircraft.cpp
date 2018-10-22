@@ -60,6 +60,7 @@ namespace GEX
 		, directionIndex_(0)
 		, isFiring_(false)
 		, isLaunchingMissiles_(false)
+		, isMarkedForRemoval_(false)
 		, fireRateLevel_(1)
 		, fireSpreadLevel_(1)
 		, missileAmmo_(10)
@@ -72,22 +73,22 @@ namespace GEX
 		centerOrigin(sprite_);
 
 		//Set up Commands
-		fireCommand_.category = Category::AirSceneLayer;
+		fireCommand_.category = Category::SceneAirLayer;
 		fireCommand_.action = [this, &textures] (SceneNode& node, sf::Time dt) 
 		{
 			createBullets(node, textures);
 		};
 
-		launchMissileCommand_.category = Category::AirSceneLayer;
+		launchMissileCommand_.category = Category::SceneAirLayer;
 		launchMissileCommand_.action = [this, &textures](SceneNode& node, sf::Time dt)
 		{
 			createProjectile(node, Projectile::Type::Missile, 0.f, 0.5f, textures);
 		};
 
-		dropPickupCommand_.category = Category::AirSceneLayer;
+		dropPickupCommand_.category = Category::SceneAirLayer;
 		dropPickupCommand_.action = [this, &textures](SceneNode& node, sf::Time dt)
 		{
-			//createPicku(node, textures);
+			createPickup(node, textures);
 		};
 
 		//set up text for health and missiles
@@ -148,6 +149,11 @@ namespace GEX
 		return getWorldTransform().transformRect(sprite_.getGlobalBounds());
 	}
 
+	bool Aircraft::isMarkedForRemoval() const
+	{
+		return isMarkedForRemoval_;
+	}
+
 	bool Aircraft::isAllied() const
 	{
 		return type_ == Type::Eagle;
@@ -155,10 +161,19 @@ namespace GEX
 
 	void Aircraft::updateCurrent(sf::Time dt, CommandQueue& commands)
 	{
+		checkProjectileLaunch(dt, commands);
+
+		if (isDestroyed() && !isAllied())
+		{
+			checkPickupDrop(commands);
+
+			isMarkedForRemoval_ = true;
+			return;
+		}
+
 		updateMovementPattern(dt);
 		Entity::updateCurrent(dt, commands);
 		updateTexts();
-		checkProjectileLaunch(dt, commands);
 	}
 
 	void Aircraft::updateMovementPattern(sf::Time dt)
@@ -220,6 +235,22 @@ namespace GEX
 		projectile->setPosition(getWorldPosition() + offset * sign);
 		projectile->setVelocity(velocity * sign);
 		node.attachChild(std::move(projectile));
+	}
+
+	void Aircraft::createPickup(SceneNode & node, const TextureManager & textures) const
+	{
+		auto type = static_cast<Pickup::Type>(0);//(static_cast<int>(Pickup::Type::Count)));
+
+		std::unique_ptr<Pickup> pickup(new Pickup(type, textures));
+		pickup->setPosition(getWorldPosition());
+		pickup->setVelocity(0.f, 0.f);
+		node.attachChild(std::move(pickup));
+	}
+
+	void Aircraft::checkPickupDrop(CommandQueue & commands)
+	{
+		if (!isAllied() )//&& randomInt(3) == 0)
+			commands.push(dropPickupCommand_);
 	}
 
 	void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue & commands)

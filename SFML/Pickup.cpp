@@ -56,7 +56,7 @@ namespace GEX
 	}
 	sf::FloatRect Pickup::getBoundingBox() const
 	{
-		return sf::FloatRect();
+		return getWorldTransform().transformRect(sprite_.getGlobalBounds());
 	}
 	void Pickup::apply(Aircraft & player)
 	{

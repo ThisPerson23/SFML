@@ -73,6 +73,8 @@ namespace GEX
 		void					collectMissiles(unsigned int count);
 		sf::FloatRect			getBoundingBox() const override;
 
+		bool					isMarkedForRemoval() const override;
+
 	protected:
 		void					updateCurrent(sf::Time dt, CommandQueue& commands) override;
 
@@ -83,7 +85,9 @@ namespace GEX
 		void					createBullets(SceneNode& node, const TextureManager& textures);
 		void					createProjectile(SceneNode& node, Projectile::Type type, 
 												 float xoffset, float yoffset, const TextureManager& textures);
+		void					createPickup(SceneNode& node, const TextureManager& textures) const;
 
+		void					checkPickupDrop(CommandQueue& commands);
 		void					checkProjectileLaunch(sf::Time dt, CommandQueue& commands);
 
 	private:
@@ -97,6 +101,7 @@ namespace GEX
 
 		bool					isFiring_;
 		bool					isLaunchingMissiles_;
+		bool					isMarkedForRemoval_;
 
 		int						fireRateLevel_;
 		int						fireSpreadLevel_;

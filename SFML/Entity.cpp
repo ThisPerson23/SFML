@@ -89,6 +89,11 @@ namespace GEX
 		hitPoints_ = 0;
 	}
 
+	void Entity::remove()
+	{
+		destroy();
+	}
+
 	int Entity::getHitpoints() const
 	{
 		return hitPoints_;

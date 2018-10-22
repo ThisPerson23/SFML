@@ -48,7 +48,8 @@ namespace GEX
 			HealthRefill,
 			MissileRefill,
 			FireSpread,
-			FireRate
+			FireRate,
+			Count
 		};
 
 	public:

@@ -6,7 +6,8 @@
 *
 *
 * @section DESCRIPTION
-* Entity Class
+* World Class
+* The game's world
 *
 *
 *
@@ -34,41 +35,19 @@
 
 #pragma once
 
-#include "SceneNode.h"
-#include "CommandQueue.h"
+#include "State.h"
 
-namespace GEX
-{ 
-	class Entity : public SceneNode
-	{
+class GameOverState : public GEX::State
+{
 	public:
-							Entity(int hp);
+		GameOverState(GEX::StateStack& stateStack, Context context);
 
-		void				setVelocity(sf::Vector2f velocity);
-		void				setVelocity(float vx, float vy);
-
-		sf::Vector2f		getVelocity() const;
-
-		void				accelerate(sf::Vector2f velocity);
-		void				accelerate(float vx, float vy);
-
-		bool				isDestroyed() const override;
-
-		void				damage(int points);
-		void				repair(int points);
-		void				destroy();
-		void				remove();
-
-		int					getHitpoints() const;
-
-	protected:
-		 void				updateCurrent(sf::Time dt, CommandQueue& commands) override;
+		void					draw() override;
+		bool					update(sf::Time dt) override;
+		bool					handleEvent(const sf::Event& event) override;
 
 	private:
-		virtual void		drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
+		sf::Text				gameOverText_;
+		sf::Time				elapsedTime_;
+};
 
-	private:
-		sf::Vector2f		velocity_;
-		int					hitPoints_;
-	};
-}

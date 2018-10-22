@@ -43,6 +43,7 @@ namespace GEX
 		Game,
 		Pause,
 		GEXScreen,
+		GameOver,
 		None
 	};
 }
