@@ -229,7 +229,7 @@ namespace GEX
 		unsigned int category1 = colliders.first->getCategory();
 		unsigned int category2 = colliders.second->getCategory();
 
-		// Make sure pair entryhas category type1 and second has type2
+		// Make sure pair entry has category type1 and second has type2
 		if (type1 & category1 && type2 & category2)
 		{
 			return true;
@@ -317,16 +317,8 @@ namespace GEX
 
 	void World::loadTextures()
 	{
-		textures_.load(GEX::TextureID::Eagle, "Media/Textures/Eagle.png");
-		textures_.load(GEX::TextureID::Raptor, "Media/Textures/Raptor.png");
-		textures_.load(GEX::TextureID::Landscape, "Media/Textures/Desert.png");
-		textures_.load(GEX::TextureID::Avenger, "Media/Textures/Avenger.png");
-		textures_.load(GEX::TextureID::Bullet, "Media/Textures/Bullet.png");
-		textures_.load(GEX::TextureID::Missile, "Media/Textures/Missile.png");
-		textures_.load(GEX::TextureID::FireRate, "Media/Textures/FireRate.png");
-		textures_.load(GEX::TextureID::FireSpread, "Media/Textures/FireSpread.png");
-		textures_.load(GEX::TextureID::MissileRefill, "Media/Textures/MissileRefill.png");
-		textures_.load(GEX::TextureID::HealthRefill, "Media/Textures/HealthRefill.png");
+		textures_.load(GEX::TextureID::Entities, "Media/Textures/Entities.png");
+		textures_.load(GEX::TextureID::Jungle, "Media/Textures/JungleBig.png");
 	}
 
 	void World::buildScene()
@@ -341,7 +333,7 @@ namespace GEX
 		}
 
 		// draw background
-		sf::Texture& texture = textures_.get(TextureID::Landscape);
+		sf::Texture& texture = textures_.get(TextureID::Jungle);
 		sf::IntRect textureRect(worldBounds_);
 		texture.setRepeated(true);
 

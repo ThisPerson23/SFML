@@ -37,18 +37,13 @@
 namespace GEX
 { 
 	enum class TextureID {
-		Landscape,
-		Missile,
-		Eagle,
-		Raptor,
-		Avenger,
 		TitleScreen,
 		GEXStateFace,
-		Bullet,
-		HealthRefill,
-		MissileRefill,
-		FireSpread,
-		FireRate
+		Entities,
+		Jungle,
+		Explosion,
+		Particle,
+		FinishLine
 	};
 
 	enum class FontID {

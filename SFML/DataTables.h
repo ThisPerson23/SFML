@@ -38,6 +38,7 @@
 #include "Projectile.h"
 #include "Aircraft.h"
 #include "Pickup.h"
+#include "Particle.h"
 
 #include <SFML\System\Time.hpp>
 #include <SFML\Graphics\Color.hpp>
@@ -64,6 +65,7 @@ namespace GEX
 		int								hitpoints;
 		float							speed;
 		TextureID						texture;
+		sf::IntRect						textureRect;
 		sf::Time						fireInterval;
 
 		std::vector<Direction>			directions;
@@ -74,15 +76,24 @@ namespace GEX
 		int			damage;
 		float		speed;
 		TextureID	texture;
+		sf::IntRect	textureRect;
 	};
 
 	struct PickupData
 	{
 		std::function<void(Aircraft&)>	action;
 		TextureID						texture;
+		sf::IntRect						textureRect;
+	};
+
+	struct ParticleData
+	{
+		sf::Color		color;
+		sf::Time		lifetime;
 	};
 
 	std::map<Pickup::Type, PickupData>			initializePickupData();
 	std::map<Projectile::Type, ProjectileData>	initializeProjectileData();
 	std::map<Aircraft::Type, AircraftData>		initializeAircraftData();
+	std::map<Particle::Type, ParticleData>		initializeParticleData();
 }

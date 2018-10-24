@@ -6,7 +6,7 @@
 *
 *
 * @section DESCRIPTION
-* Category Helper Class
+* Particle Header
 *
 *
 *
@@ -31,24 +31,26 @@
 * I certify that this work is solely my own and complies with
 * NBCC Academic Integrity Policy (policy 1111)
 */
+
 #pragma once
 
-namespace Category
-{
-	enum Type
-	{
-		None				= 0,
-		Scene				= 1 << 0,
-		PlayerAircraft		= 1 << 1,
-		AlliedAircraft		= 1 << 2,
-		EnemyAircraft		= 1 << 3,
-		EnemyProjectile		= 1 << 4,
-		AlliedProjectile	= 1 << 5,
-		SceneAirLayer		= 1 << 6,
-		Pickup				= 1 << 7,
-		ParticleSystem		= 1 << 8,
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/System/Time.hpp>
+#include <SFML/System/Vector2.hpp>
 
-		Aircraft	 = PlayerAircraft | AlliedAircraft | EnemyAircraft,
-		Projectile	 = EnemyProjectile | AlliedProjectile
+namespace GEX
+{ 
+	struct Particle
+	{
+		enum class Type
+		{
+			Propellant,
+			Smoke,
+			ParticleCount
+		};
+
+		sf::Vector2f	position;
+		sf::Color		color;
+		sf::Time		lifetime;
 	};
 }
