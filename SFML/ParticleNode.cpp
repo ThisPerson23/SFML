@@ -77,15 +77,11 @@ namespace GEX
 	{
 		// Remove aged out particles
 		while (!particles_.empty() && particles_.front().lifetime <= sf::Time::Zero)
-		{
 			particles_.pop_front();
-		}
 
-		// Count down the particle's lifetime
-		for (auto& p : particles_)
-		{
+		// Count down the particles' lifetime
+		for (Particle& p : particles_)
 			p.lifetime -= dt;
-		}
 
 		// Mark for update
 		needsVertexUpdate_ = true;
@@ -122,6 +118,7 @@ namespace GEX
 		sf::Vector2f half = size / 2.f;
 
 		// Refill vertex array
+		vertexArray_.clear();
 		for (const Particle& p : particles_)
 		{
 			sf::Vector2f pos = p.position;

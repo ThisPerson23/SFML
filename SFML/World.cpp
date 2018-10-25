@@ -36,6 +36,7 @@
 #include "Aircraft.h"
 #include "Pickup.h"
 #include "Projectile.h"
+#include "ParticleNode.h"
 
 namespace GEX
 { 
@@ -165,7 +166,7 @@ namespace GEX
 			std::unique_ptr<Aircraft> enemy(new Aircraft(spawnpoint.type, textures_));
 			enemy->setPosition(spawnpoint.x, spawnpoint.y);
 			enemy->setRotation(180);
-			sceneLayers_[Air]->attachChild(std::move(enemy));
+			sceneLayers_[UpperAir]->attachChild(std::move(enemy));
 			enemySpawnPoints_.pop_back();
 		}
 	}
@@ -319,6 +320,9 @@ namespace GEX
 	{
 		textures_.load(GEX::TextureID::Entities, "Media/Textures/Entities.png");
 		textures_.load(GEX::TextureID::Jungle, "Media/Textures/JungleBig.png");
+		textures_.load(GEX::TextureID::Particle, "Media/Textures/Particle.png");
+		textures_.load(GEX::TextureID::Explosion, "Media/Textures/Explosion.png");
+		textures_.load(GEX::TextureID::FinishLine, "Media/Textures/FinishLine.png");
 	}
 
 	void World::buildScene()
@@ -326,11 +330,18 @@ namespace GEX
 		// Initialize layers
 		for (int i = 0; i < LayerCount; i++)
 		{
-			auto category = i == Air ? Category::Type::SceneAirLayer : Category::Type::None;
+			auto category = i == UpperAir ? Category::Type::SceneAirLayer : Category::Type::None;
 			SceneNode::Ptr layer(new SceneNode(category));
 			sceneLayers_.push_back(layer.get());
 			sceneGraph_.attachChild(std::move(layer));
 		}
+
+		// Particle System
+		std::unique_ptr<ParticleNode> smoke(new ParticleNode(Particle::Type::Smoke, textures_));
+		sceneLayers_[LowerAir]->attachChild(std::move(smoke));
+
+		std::unique_ptr<ParticleNode> fire(new ParticleNode(Particle::Type::Propellant, textures_));
+		sceneLayers_[LowerAir]->attachChild(std::move(fire));
 
 		// draw background
 		sf::Texture& texture = textures_.get(TextureID::Jungle);
@@ -347,7 +358,7 @@ namespace GEX
 		leader->setPosition(spawnPosition_);
 		leader->setVelocity(50.f, scrollSpeed_);
 		playerAircraft_ = leader.get();
-		sceneLayers_[Air]->attachChild(std::move(leader));
+		sceneLayers_[UpperAir]->attachChild(std::move(leader));
 
 		// add enemy planes
 		addEnemies();

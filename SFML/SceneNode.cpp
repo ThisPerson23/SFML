@@ -84,9 +84,7 @@ namespace GEX
 		sf::Transform transform = sf::Transform::Identity;
 
 		for (const SceneNode* node = this; node != nullptr; node = node->parent_)
-		{
 			transform = node->getTransform() * transform;
-		}
 
 		return transform;
 	}
