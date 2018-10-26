@@ -297,7 +297,7 @@ namespace GEX
 
 	void Aircraft::createPickup(SceneNode & node, const TextureManager & textures) const
 	{
-		auto type = static_cast<Pickup::Type>(0);//(static_cast<int>(Pickup::Type::Count)));
+		auto type = static_cast<Pickup::Type>(randomInt(static_cast<int>(Pickup::Type::Count)));
 
 		std::unique_ptr<Pickup> pickup(new Pickup(type, textures));
 		pickup->setPosition(getWorldPosition());
@@ -307,7 +307,7 @@ namespace GEX
 
 	void Aircraft::checkPickupDrop(CommandQueue & commands)
 	{
-		if (!isAllied() && randomInt(1) == 0 && !spawnPickup_)
+		if (!isAllied() && randomInt(3) == 0 && !spawnPickup_)
 			commands.push(dropPickupCommand_);
 
 		spawnPickup_ = true;

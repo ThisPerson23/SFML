@@ -78,9 +78,11 @@ namespace GEX
 
 	int randomInt(int exclusiveMax)
 	{
-		std::default_random_engine randomEngine;
-		std::uniform_int_distribution<> distr(0, exclusiveMax - 1);
-		return distr(randomEngine);
+		std::random_device rd;
+		std::mt19937 rng(rd());
+		std::uniform_int_distribution<int> uni(0, exclusiveMax - 1);
+
+		return uni(rng);
 	}
 
 	float length(sf::Vector2f vector)
