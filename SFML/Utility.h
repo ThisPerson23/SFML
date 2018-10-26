@@ -34,6 +34,8 @@
 
 #pragma once
 
+#include "Animation.h"
+
 #include <SFML\System\Vector2.hpp>
 
 namespace sf
@@ -45,6 +47,7 @@ namespace GEX
 {
 	void centerOrigin(sf::Sprite& sprite);
 	void centerOrigin(sf::Text& text);
+	void centerOrigin(Animation& animation);
 
 	float			toDegree(float radian);
 	float			toRadian(float degree);

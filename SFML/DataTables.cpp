@@ -45,12 +45,14 @@ namespace GEX
 		data[Aircraft::Type::Eagle].texture = TextureID::Entities;
 		data[Aircraft::Type::Eagle].textureRect = sf::IntRect(0, 0, 48, 64);
 		data[Aircraft::Type::Eagle].fireInterval = sf::seconds(1);
+		data[Aircraft::Type::Eagle].hasRollAnimation = true;
 
 		data[Aircraft::Type::Raptor].hitpoints = 20;
 		data[Aircraft::Type::Raptor].speed = 80.f;
 		data[Aircraft::Type::Raptor].texture = TextureID::Entities;
 		data[Aircraft::Type::Raptor].textureRect = sf::IntRect(144, 0, 84, 64);
 		data[Aircraft::Type::Raptor].fireInterval = sf::Time::Zero;
+		data[Aircraft::Type::Raptor].hasRollAnimation = false;
 
 		data[Aircraft::Type::Raptor].directions.emplace_back(Direction(45.f, 80.f));
 		data[Aircraft::Type::Raptor].directions.emplace_back(Direction(-45.f, 160.f));
@@ -61,6 +63,7 @@ namespace GEX
 		data[Aircraft::Type::Avenger].texture = TextureID::Entities;
 		data[Aircraft::Type::Avenger].textureRect = sf::IntRect(228, 0, 60, 59);
 		data[Aircraft::Type::Avenger].fireInterval = sf::seconds(2);
+		data[Aircraft::Type::Avenger].hasRollAnimation = false;
 
 		data[Aircraft::Type::Avenger].directions.emplace_back(Direction(45.f, 50.f));
 		data[Aircraft::Type::Avenger].directions.emplace_back(Direction(0.f, 50.f));

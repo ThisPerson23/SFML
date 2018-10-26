@@ -57,7 +57,7 @@ namespace GEX
 		void				damage(int points);
 		void				repair(int points);
 		void				destroy();
-		void				remove();
+		virtual void		remove();
 
 		int					getHitpoints() const;
 

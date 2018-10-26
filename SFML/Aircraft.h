@@ -42,6 +42,7 @@
 #include "TextureManager.h"
 #include "Projectile.h"
 #include "TextNode.h"
+#include "Animation.h"
 
 namespace GEX
 {
@@ -61,8 +62,6 @@ namespace GEX
 		void					drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
 		unsigned int			getCategory() const override;
 
-		void					updateTexts(); //update mini health and missile display
-
 		bool					isAllied() const;
 
 		void					fire();
@@ -74,6 +73,8 @@ namespace GEX
 		sf::FloatRect			getBoundingBox() const override;
 
 		bool					isMarkedForRemoval() const override;
+
+		void					remove() override;
 
 	protected:
 		void					updateCurrent(sf::Time dt, CommandQueue& commands) override;
@@ -90,9 +91,15 @@ namespace GEX
 		void					checkPickupDrop(CommandQueue& commands);
 		void					checkProjectileLaunch(sf::Time dt, CommandQueue& commands);
 
+		void					updateTexts(); //update mini health and missile display
+		void					updateRollAnimation(); //update the sprite of the player aircraft, depending on the travel direction
+
 	private:
 		Type					type_;
 		sf::Sprite				sprite_;
+		Animation				explosion_;
+		bool					showExplosion_;
+
 		TextNode*				healthDisplay_;
 		TextNode*				missileDisplay_;
 
@@ -112,5 +119,7 @@ namespace GEX
 		Command					fireCommand_;
 		Command					launchMissileCommand_;
 		Command					dropPickupCommand_;
+
+		bool					spawnPickup_;
 	};
 }

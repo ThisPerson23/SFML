@@ -54,6 +54,8 @@ namespace GEX
 		: Entity(TABLE.at(type).hitpoints)
 		, type_(type)
 		, sprite_(textures.get(TABLE.at(type).texture), TABLE.at(type).textureRect)
+		, explosion_(textures.get(TextureID::Explosion))
+		, showExplosion_(true)
 		, healthDisplay_(nullptr)
 		, missileDisplay_(nullptr)
 		, travelDistance_(0.f)
@@ -68,8 +70,13 @@ namespace GEX
 		, fireCommand_()
 		, launchMissileCommand_()
 		, dropPickupCommand_()
+		, spawnPickup_(false)
 	{
+		explosion_.setFrameSize(sf::Vector2i(256, 256));
+		explosion_.setNumFrames(16);
+		explosion_.setDuration(sf::seconds(1));
 
+		centerOrigin(explosion_);
 		centerOrigin(sprite_);
 
 		//Set up Commands
@@ -95,6 +102,16 @@ namespace GEX
 		std::unique_ptr<TextNode> health(new TextNode(""));
 		healthDisplay_ = health.get();
 		attachChild(std::move(health));
+
+		if (getCategory() == Category::PlayerAircraft)
+		{
+			std::unique_ptr<TextNode> missileDisplay(new TextNode(""));
+			missileDisplay->setPosition(0, 70);
+			missileDisplay_ = missileDisplay.get();
+			attachChild(std::move(missileDisplay));
+		}
+
+		updateTexts();
 		
 	}
 
@@ -111,9 +128,39 @@ namespace GEX
 
 	void Aircraft::updateTexts()
 	{
-		healthDisplay_->setString(std::to_string(getHitpoints()) + "HP");
+		// Display hitpoints
+		if (isDestroyed())
+			healthDisplay_->setString("");
+		else
+			healthDisplay_->setString(std::to_string(getHitpoints()) + "HP");
+
 		healthDisplay_->setPosition(0.f, 50.f);
 		healthDisplay_->setRotation(-getRotation());
+
+		// Display missiles, if available
+		if (missileDisplay_)
+		{
+			if (missileAmmo_ == 0 || isDestroyed())
+				missileDisplay_->setString("");
+			else
+				missileDisplay_->setString("M: " + std::to_string(missileAmmo_));
+		}
+	}
+
+	void Aircraft::updateRollAnimation()
+	{
+		if (TABLE.at(type_).hasRollAnimation)
+		{
+			sf::IntRect	textureRect = TABLE.at(type_).textureRect;
+
+			// Roll left or right depending on velocity
+			if (getVelocity().x < 0.f)
+				textureRect.left += textureRect.width;
+			else if (getVelocity().x > 0.f)
+				textureRect.left += 2 * textureRect.width;
+
+			sprite_.setTextureRect(textureRect);
+		}
 	}
 
 	void Aircraft::fire()
@@ -151,7 +198,13 @@ namespace GEX
 
 	bool Aircraft::isMarkedForRemoval() const
 	{
-		return isMarkedForRemoval_;
+		return isDestroyed() && explosion_.isFinished() || !showExplosion_;
+	}
+
+	void Aircraft::remove()
+	{
+		Entity::remove();
+		showExplosion_ = false;
 	}
 
 	bool Aircraft::isAllied() const
@@ -161,19 +214,24 @@ namespace GEX
 
 	void Aircraft::updateCurrent(sf::Time dt, CommandQueue& commands)
 	{
-		checkProjectileLaunch(dt, commands);
+		// Update texts and roll animation
+		updateTexts();
+		updateRollAnimation();
 
-		if (isDestroyed() && !isAllied())
+		// Entity has been destroyed: Possibly drop pickup, mark for removal
+		if (isDestroyed())
 		{
 			checkPickupDrop(commands);
-
-			isMarkedForRemoval_ = true;
+			explosion_.update(dt);
 			return;
 		}
 
+		//Check if bullets or missiles are fired
+		checkProjectileLaunch(dt, commands);
+
+		//Update enemy movement pattern; apply velocity
 		updateMovementPattern(dt);
 		Entity::updateCurrent(dt, commands);
-		updateTexts();
 	}
 
 	void Aircraft::updateMovementPattern(sf::Time dt)
@@ -249,8 +307,10 @@ namespace GEX
 
 	void Aircraft::checkPickupDrop(CommandQueue & commands)
 	{
-		if (!isAllied() )//&& randomInt(3) == 0)
+		if (!isAllied() && randomInt(1) == 0 && !spawnPickup_)
 			commands.push(dropPickupCommand_);
+
+		spawnPickup_ = true;
 	}
 
 	void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue & commands)
@@ -285,6 +345,9 @@ namespace GEX
 
 	void Aircraft::drawCurrent(sf::RenderTarget & target, sf::RenderStates states) const
 	{
-		target.draw(sprite_, states);
+		if (isDestroyed() && showExplosion_)
+			target.draw(explosion_, states);
+		else
+			target.draw(sprite_, states);
 	}
 }

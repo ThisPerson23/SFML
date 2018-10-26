@@ -67,6 +67,7 @@ namespace GEX
 		TextureID						texture;
 		sf::IntRect						textureRect;
 		sf::Time						fireInterval;
+		bool							hasRollAnimation;
 
 		std::vector<Direction>			directions;
 	};

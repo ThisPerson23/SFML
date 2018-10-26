@@ -37,6 +37,8 @@
 #include <SFML\Graphics\Sprite.hpp>
 #include <SFML\Graphics\Text.hpp>
 
+#include <random>
+
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <cassert>
@@ -58,6 +60,12 @@ namespace GEX
 		text.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 	}
 
+	void centerOrigin(Animation & animation)
+	{
+		sf::FloatRect bounds = animation.getLocalBounds();
+		animation.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+	}
+
 	float toDegree(float radian)
 	{
 		return 180.f / static_cast<float>(M_PI) * radian;
@@ -70,7 +78,9 @@ namespace GEX
 
 	int randomInt(int exclusiveMax)
 	{
-		return 1;
+		std::default_random_engine randomEngine;
+		std::uniform_int_distribution<> distr(0, exclusiveMax - 1);
+		return distr(randomEngine);
 	}
 
 	float length(sf::Vector2f vector)
