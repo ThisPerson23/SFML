@@ -83,10 +83,10 @@ namespace GEX
 		actionBindings_[Action::RR].category = Category::EnemyAircraft;
 		actionBindings_[Action::RL].category = Category::EnemyAircraft;
 
-		actionBindings_[Action::Fire].action = derivedAction<Aircraft>(std::bind(&Aircraft::fire, std::placeholders::_1));
+		//actionBindings_[Action::Fire].action = derivedAction<Aircraft>(std::bind(&Aircraft::fire, std::placeholders::_1));
 		actionBindings_[Action::Fire].category = Category::PlayerAircraft;
 
-		actionBindings_[Action::LaunchMissile].action = derivedAction<Aircraft>(std::bind(&Aircraft::launchMissile, std::placeholders::_1));
+		//actionBindings_[Action::LaunchMissile].action = derivedAction<Aircraft>(std::bind(&Aircraft::launchMissile, std::placeholders::_1));
 		actionBindings_[Action::LaunchMissile].category = Category::PlayerAircraft;
 	}
 

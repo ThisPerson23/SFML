@@ -198,7 +198,7 @@ namespace GEX
 
 	bool Aircraft::isMarkedForRemoval() const
 	{
-		return isDestroyed() && explosion_.isFinished() || !showExplosion_;
+		return isDestroyed() && (explosion_.isFinished() || !showExplosion_);
 	}
 
 	void Aircraft::remove()
