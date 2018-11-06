@@ -38,11 +38,13 @@
 #include "Projectile.h"
 #include "ParticleNode.h"
 
+#include <SFML/Graphics/RenderTarget.hpp>
+
 namespace GEX
 { 
-	World::World(sf::RenderWindow& window)
-	: window_(window)
-	, worldView_(window.getView())
+	World::World(sf::RenderTarget& outputTarget)
+	: target_(outputTarget)
+	, worldView_(outputTarget.getDefaultView())
 	, textures_()
 	, sceneGraph_()
 	, sceneLayers_()
@@ -50,7 +52,10 @@ namespace GEX
 	, spawnPosition_(worldView_.getSize().x / 2.f, worldBounds_.height - worldView_.getSize().y / 2.f)
 	, scrollSpeed_(-50.f)
 	, playerAircraft_(nullptr)
+	, bloomEffect_()
 	{
+		sceneTexture_.create(target_.getSize().x, target_.getSize().y);
+
 		loadTextures();
 		buildScene();
 
@@ -297,8 +302,20 @@ namespace GEX
 
 	void World::draw()
 	{
-		window_.setView(worldView_);
-		window_.draw(sceneGraph_);
+		if (PostEffect::isSupported())
+		{
+			// Apply effects
+			sceneTexture_.clear();
+			sceneTexture_.setView(worldView_);
+			sceneTexture_.draw(sceneGraph_);
+			sceneTexture_.display();
+			bloomEffect_.apply(sceneTexture_, target_);
+		}
+		else
+		{
+			target_.setView(worldView_);
+			target_.draw(sceneGraph_);
+		}
 	}
 
 	CommandQueue& World::getCommandQueue()
