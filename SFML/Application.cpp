@@ -80,14 +80,14 @@ void Application::run()
 
 		while (timeSinceLastUpdate > TimePerFrame)
 		{
+			timeSinceLastUpdate -= TimePerFrame;
+
 			processInput();
 			update(TimePerFrame);
 
 			if (stateStack_.isEmpty())
 				window_.close();
 
-			timeSinceLastUpdate -= TimePerFrame;
-			updateStatistics(TimePerFrame);
 		}
 
 		updateStatistics(timeSinceLastUpdate);
