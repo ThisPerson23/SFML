@@ -41,6 +41,7 @@ class GEXState : public GEX::State
 {
 public:
 	GEXState(GEX::StateStack& stateStack, Context context);
+	~GEXState();
 	
 	void					draw() override;
 	bool					update(sf::Time dt) override;

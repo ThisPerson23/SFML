@@ -36,7 +36,6 @@
 #include "GameState.h"
 #include "PauseState.h"
 #include "MenuState.h"
-#include "TitleState.h"
 #include "GEXState.h"
 #include "GameOverState.h"
 #include "FontManager.h"
@@ -48,7 +47,9 @@ Application::Application()
 	: window_(sf::VideoMode(1280, 960), "Killer Planes", sf::Style::Close)
 	, player_()
 	, textures_()
-	, stateStack_(GEX::State::Context(window_, textures_, player_))
+	, music_()
+	, sound_()
+	, stateStack_(GEX::State::Context(window_, textures_, player_, music_, sound_))
 	, statisticsText_()
 	, statisticsUpdateTime_()
 	, statisticsNumFrames_(0)
@@ -57,7 +58,7 @@ Application::Application()
 
 	GEX::FontManager::getInstance().load(GEX::FontID::Main, "Media/Sansation.ttf");
 
-	textures_.load(GEX::TextureID::TitleScreen, "Media/Menus/TitleScreenBig.png");
+	textures_.load(GEX::TextureID::TitleScreen, "Media/Textures/TitleScreen.png");
 	textures_.load(GEX::TextureID::GEXStateFace, "Media/face.png");
 
 	statisticsText_.setFont(GEX::FontManager::getInstance().get(GEX::FontID::Main));
@@ -66,7 +67,7 @@ Application::Application()
 	statisticsText_.setString("Frames Per Second = \nTime / Update = ");
 
 	registerStates();
-	stateStack_.pushState(GEX::StateID::Title);
+	stateStack_.pushState(GEX::StateID::Menu);
 
 }
 void Application::run()
@@ -141,7 +142,6 @@ void Application::updateStatistics(sf::Time dt)
 
 void Application::registerStates()
 {
-	stateStack_.registerState<TitleState>(GEX::StateID::Title);
 	stateStack_.registerState<MenuState>(GEX::StateID::Menu);
 	stateStack_.registerState<GameState>(GEX::StateID::Game);
 	stateStack_.registerState<PauseState>(GEX::StateID::Pause);

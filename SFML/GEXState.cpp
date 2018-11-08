@@ -82,6 +82,13 @@ GEXState::GEXState(GEX::StateStack& stateStack, Context context)
 	instructionsTextReturnToMenu_.setString("Press 'Backspace' to Return to the Main Menu");
 	GEX::centerOrigin(instructionsTextReturnToMenu_);
 	instructionsTextReturnToMenu_.setPosition(0.5f * viewSize.x, 0.7f * viewSize.y);
+
+	getContext().music->setPaused(true);
+}
+
+GEXState::~GEXState()
+{
+	getContext().music->setPaused(false);
 }
 
 void GEXState::draw()

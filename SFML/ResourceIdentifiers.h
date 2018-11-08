@@ -36,7 +36,8 @@
 
 namespace GEX
 { 
-	enum class TextureID {
+	enum class TextureID 
+	{
 		TitleScreen,
 		GEXStateFace,
 		Entities,
@@ -46,7 +47,25 @@ namespace GEX
 		FinishLine
 	};
 
-	enum class FontID {
+	enum class FontID 
+	{
 		Main
+	};
+
+	enum class MusicID 
+	{
+		MenuTheme,
+		MissionTheme
+	};
+
+	enum class SoundEffectID
+	{
+		AlliedGunFire,
+		EnemyGunFire,
+		Explosion1,
+		Explosion2,
+		LaunchMissile,
+		CollectPickup,
+		Button
 	};
 }

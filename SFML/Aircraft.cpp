@@ -38,10 +38,12 @@
 #include "Category.h"
 #include "TextNode.h"
 #include "CommandQueue.h"
+#include "SoundNode.h"
 
 #include <string>
+#include <functional>
 
-
+using namespace std::placeholders;
 
 namespace GEX
 { 
@@ -63,6 +65,7 @@ namespace GEX
 		, isFiring_(false)
 		, isLaunchingMissiles_(false)
 		, isMarkedForRemoval_(false)
+		, hasPlayedExplosionSound_(false)
 		, fireRateLevel_(1)
 		, fireSpreadLevel_(1)
 		, missileAmmo_(10)
@@ -174,6 +177,18 @@ namespace GEX
 		isLaunchingMissiles_ = true;
 	}
 
+	void Aircraft::playLocalSound(CommandQueue & commands, SoundEffectID effect)
+	{
+		Command playSoundCommand;
+		
+		playSoundCommand.category = Category::SoundEffect;
+		playSoundCommand.action = derivedAction<SoundNode>(
+			std::bind(&SoundNode::playSound, _1, effect, getWorldPosition())
+		);
+
+		commands.push(playSoundCommand);
+	}
+
 	void Aircraft::increaseFireRate()
 	{
 		if (fireRateLevel_ < 10)
@@ -223,6 +238,15 @@ namespace GEX
 		{
 			checkPickupDrop(commands);
 			explosion_.update(dt);
+
+			if (!hasPlayedExplosionSound_)
+			{
+				hasPlayedExplosionSound_ = true;
+				SoundEffectID effect = (randomInt(2) == 0 ? SoundEffectID::Explosion1 
+														  : SoundEffectID::Explosion2);
+				playLocalSound(commands, effect);
+			}
+
 			return;
 		}
 
@@ -323,8 +347,11 @@ namespace GEX
 		if (isFiring_ && fireCountDown_ <= sf::Time::Zero)
 		{
 			commands.push(fireCommand_);
-			isFiring_ = false;
+			playLocalSound(commands, 
+				isAllied() ? SoundEffectID::AlliedGunFire 
+						   : SoundEffectID::EnemyGunFire);
 			fireCountDown_ = TABLE.at(type_).fireInterval / (fireRateLevel_ + 1.f);
+			isFiring_ = false;
 		}
 		else if (fireCountDown_ > sf::Time::Zero)
 		{
@@ -337,6 +364,7 @@ namespace GEX
 			if(missileAmmo_ > 0)
 			{ 
 				commands.push(launchMissileCommand_);
+				playLocalSound(commands, SoundEffectID::LaunchMissile);
 				isLaunchingMissiles_ = false;
 				--missileAmmo_;
 			}

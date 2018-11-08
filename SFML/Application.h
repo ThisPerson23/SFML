@@ -36,12 +36,13 @@
 #include "PlayerControl.h"
 #include "TextureManager.h"
 #include "StateStack.h"
+#include "MusicPlayer.h"
+#include "SoundPlayer.h"
 
 #include <SFML\System\Time.hpp>
 #include <SFML\Graphics\RenderWindow.hpp>
 #include <SFML\Graphics\Font.hpp>
 #include <SFML\Graphics\Text.hpp>
-
 
 class Application
 {
@@ -64,6 +65,8 @@ class Application
 		sf::RenderWindow			window_;
 		GEX::PlayerControl			player_;
 		GEX::TextureManager			textures_;
+		GEX::MusicPlayer			music_;
+		GEX::SoundPlayer			sound_;
 
 		GEX::StateStack				stateStack_;
 

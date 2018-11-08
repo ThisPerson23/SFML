@@ -46,6 +46,7 @@
 #include "CommandQueue.h"
 #include "PostEffect.h"
 #include "BloomEffect.h"
+#include "SoundPlayer.h"
 
 #include <vector>
 
@@ -59,7 +60,7 @@ namespace GEX
 	class World
 	{
 	public:
-		explicit					World(sf::RenderTarget& outputTarget);
+		explicit					World(sf::RenderTarget& outputTarget, SoundPlayer& sounds);
 
 		void						update(sf::Time dt, CommandQueue& commands);
 		void						draw();
@@ -86,6 +87,7 @@ namespace GEX
 		void						handleCollision();
 
 		void						destroyEntitiesOutOfView();
+		void						updateSounds();
 
 	private:
 		enum Layer 
@@ -114,6 +116,7 @@ namespace GEX
 		sf::RenderTexture			sceneTexture_;
 		sf::View					worldView_;
 		TextureManager				textures_;
+		SoundPlayer&				sounds_;
 
 		SceneNode					sceneGraph_;
 		std::vector<SceneNode*>		sceneLayers_;

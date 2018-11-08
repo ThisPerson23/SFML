@@ -6,7 +6,7 @@
 *
 *
 * @section DESCRIPTION
-* TitleState Class
+* SoundNode Helper Class
 *
 *
 *
@@ -32,25 +32,24 @@
 * NBCC Academic Integrity Policy (policy 1111)
 */
 
-#pragma once
+#include "SoundNode.h"
+#include "SoundPlayer.h"
 
-#include "CommandQueue.h"
-#include "State.h"
+namespace GEX
+{ 
+	SoundNode::SoundNode(SoundPlayer& player)
+		: SceneNode()
+		, sounds_(player)
+	{
+	}
 
-class TitleState : public GEX::State
-{
-public:
-	TitleState(GEX::StateStack& stateStack, Context context);
-	
-	void					draw() override;
-	bool					update(sf::Time dt) override;
-	bool					handleEvent(const sf::Event& event) override;
+	void SoundNode::playSound(SoundEffectID sound, sf::Vector2f position)
+	{
+		sounds_.play(sound, position);
+	}
 
-private:
-	sf::Sprite				backgroundSprite_;
-	sf::Text				text_;
-	bool					showText_;
-	sf::Time				textEffectTime_;
-
-};
-
+	unsigned int SoundNode::getCategory() const
+	{
+		return Category::SoundEffect;
+	}
+}

@@ -6,7 +6,7 @@
 *
 *
 * @section DESCRIPTION
-* State Class
+* MusicPlayer Class
 *
 *
 *
@@ -32,49 +32,34 @@
 * NBCC Academic Integrity Policy (policy 1111)
 */
 
-#include "State.h"
-#include "StateStack.h"
+#pragma once
+
+#include "ResourceIdentifiers.h"
+
+#include <SFML/Audio/Music.hpp>
+
+#include <map>
+#include <string>
 
 namespace GEX
 { 
-	State::Context::Context(
-		sf::RenderWindow & window,
-		TextureManager & textures,
-		PlayerControl & player,
-		MusicPlayer & music,
-		SoundPlayer & sound)
-		: window(&window)
-		, textures(&textures)
-		, player(&player)
-		, music(&music)
-		, sound(&sound)
-	{}
-
-	State::State(StateStack & stack, Context context)
-		: stack_(&stack)
-		, context_(context)
-	{}
-
-	State::~State()
-	{}
-
-	void State::requestStackPush(StateID stateID)
+	class MusicPlayer
 	{
-		stack_->pushState(stateID);
-	}
+	public:
+											MusicPlayer();
+											~MusicPlayer() = default;
+											MusicPlayer(const MusicPlayer&) = delete;
+		MusicPlayer&						operator=(const MusicPlayer&) = delete;
 
-	void State::requestStackPop()
-	{
-		stack_->popState();
-	}
+		void								play(MusicID theme);
+		void								stop();
+		void								setPaused(bool paused);
+		void								setVolume(float volume);
 
-	void State::requestStackClear()
-	{
-		stack_->clearStates();
-	}
+	private:
+		sf::Music							music_;
+		std::map<MusicID, std::string>		filenames_;
+		float								volume_;
 
-	State::Context State::getContext() const
-	{
-		return context_;
-	}	
+	};
 }

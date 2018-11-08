@@ -37,15 +37,17 @@
 #include "Pickup.h"
 #include "Projectile.h"
 #include "ParticleNode.h"
+#include "SoundNode.h"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
 namespace GEX
 { 
-	World::World(sf::RenderTarget& outputTarget)
+	World::World(sf::RenderTarget& outputTarget, SoundPlayer& sounds)
 	: target_(outputTarget)
 	, worldView_(outputTarget.getDefaultView())
 	, textures_()
+	, sounds_(sounds)
 	, sceneGraph_()
 	, sceneLayers_()
 	, worldBounds_(0.f, 0.f, worldView_.getSize().x, 5000.f)
@@ -95,7 +97,8 @@ namespace GEX
 		sceneGraph_.update(dt, getCommandQueue());
 		adaptPlayerPosition();
 
-		
+		// Update Sound
+		updateSounds();
 	}
 
 	void World::adaptPlayerVelocity()
@@ -274,6 +277,8 @@ namespace GEX
 
 				pickup.apply(player);
 				pickup.destroy();
+
+				player.playLocalSound(commandQueue_, SoundEffectID::CollectPickup);
 			}
 			else if (matchesCategory(pair, Category::Type::PlayerAircraft, Category::Type::EnemyProjectile) ||
 				     matchesCategory(pair, Category::Type::EnemyAircraft, Category::Type::AlliedProjectile))
@@ -298,6 +303,12 @@ namespace GEX
 		});
 
 		commandQueue_.push(command);
+	}
+
+	void World::updateSounds()
+	{
+		sounds_.setListenerPosition(playerAircraft_->getWorldPosition());
+		sounds_.removeStoppedSounds();
 	}
 
 	void World::draw()
@@ -352,6 +363,10 @@ namespace GEX
 			sceneLayers_.push_back(layer.get());
 			sceneGraph_.attachChild(std::move(layer));
 		}
+
+		// Sound Effects
+		std::unique_ptr<SoundNode> sound(new SoundNode(sounds_));
+		sceneGraph_.attachChild(std::move(sound));
 
 		// Particle System
 		std::unique_ptr<ParticleNode> smoke(new ParticleNode(Particle::Type::Smoke, textures_));

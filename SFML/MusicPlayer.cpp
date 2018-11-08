@@ -6,7 +6,7 @@
 *
 *
 * @section DESCRIPTION
-* Game Class
+* MusicPlayer Class
 *
 *
 *
@@ -32,39 +32,45 @@
 * NBCC Academic Integrity Policy (policy 1111)
 */
 
-#pragma once
+#include "MusicPlayer.h"
 
-#include <SFML/Graphics.hpp>
-#include "TextureManager.h"
-#include "PlayerControl.h"
-#include "World.h"
 namespace GEX
 { 
-	class Game
+	MusicPlayer::MusicPlayer()
+		: music_()
+		, filenames_()
+		, volume_(8.f)
 	{
-	public:
-		Game();
-		~Game();
+		filenames_[MusicID::MissionTheme] = "Media/Music/MissionTheme.ogg";
+		filenames_[MusicID::MenuTheme] = "Media/Music/MenuTheme.ogg";
+	}
 
-		void						run();
+	void MusicPlayer::play(MusicID theme)
+	{
+		if (!music_.openFromFile(filenames_[theme]))
+			throw std::runtime_error("Music file could not be opened.");
 
-	private:
-		void						processInput();
-		void						update(sf::Time dt, CommandQueue& commands);
-		void						render();
+		music_.setVolume(volume_);
+		music_.setLoop(true);
+		music_.play();
+	}
 
-		void						handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
-		void						updateStatistics(sf::Time deltaTime);
+	void MusicPlayer::stop()
+	{
+		music_.stop();
+	}
 
-	private:
-		sf::RenderWindow			window_;
-		GEX::World					world_;
+	void MusicPlayer::setPaused(bool paused)
+	{
+		if (paused)
+			music_.pause();
+		else
+			music_.play();
+	}
 
-		PlayerControl				player_;
-
-		sf::Text					statisticsText_;
-		sf::Time					statisticsUpdateTime_;
-		unsigned int				statisticsNumFrames_;
-		sf::Font					font_;
-	};
+	void MusicPlayer::setVolume(float volume)
+	{
+		volume_ = volume;
+		music_.setVolume(volume_);
+	}
 }

@@ -6,7 +6,7 @@
 *
 *
 * @section DESCRIPTION
-* State Class
+* SoundNode Helper Class
 *
 *
 *
@@ -32,49 +32,25 @@
 * NBCC Academic Integrity Policy (policy 1111)
 */
 
-#include "State.h"
-#include "StateStack.h"
+#pragma once
+
+#include "SceneNode.h"
+#include "ResourceIdentifiers.h"
 
 namespace GEX
 { 
-	State::Context::Context(
-		sf::RenderWindow & window,
-		TextureManager & textures,
-		PlayerControl & player,
-		MusicPlayer & music,
-		SoundPlayer & sound)
-		: window(&window)
-		, textures(&textures)
-		, player(&player)
-		, music(&music)
-		, sound(&sound)
-	{}
+	class SoundPlayer;
 
-	State::State(StateStack & stack, Context context)
-		: stack_(&stack)
-		, context_(context)
-	{}
-
-	State::~State()
-	{}
-
-	void State::requestStackPush(StateID stateID)
+	class SoundNode : public SceneNode
 	{
-		stack_->pushState(stateID);
-	}
+	public:
+		explicit		SoundNode(SoundPlayer& player);
 
-	void State::requestStackPop()
-	{
-		stack_->popState();
-	}
+		void			playSound(SoundEffectID sound, sf::Vector2f position);
 
-	void State::requestStackClear()
-	{
-		stack_->clearStates();
-	}
-
-	State::Context State::getContext() const
-	{
-		return context_;
-	}	
+		unsigned int	getCategory() const override;
+		
+	private:
+		SoundPlayer&	sounds_;
+	};
 }

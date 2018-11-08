@@ -66,6 +66,7 @@ namespace GEX
 
 		void					fire();
 		void					launchMissile();
+		void					playLocalSound(CommandQueue& commands, SoundEffectID effect);
 
 		void					increaseFireRate();
 		void					increaseFireSpread();
@@ -109,6 +110,7 @@ namespace GEX
 		bool					isFiring_;
 		bool					isLaunchingMissiles_;
 		bool					isMarkedForRemoval_;
+		bool					hasPlayedExplosionSound_;
 
 		int						fireRateLevel_;
 		int						fireSpreadLevel_;
